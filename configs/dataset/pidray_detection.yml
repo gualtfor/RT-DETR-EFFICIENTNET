@@ -1,0 +1,73 @@
+task: detection
+
+evaluator:
+  type: CocoEvaluator
+  iou_types: ['bbox', ]
+
+num_classes: 15 # your dataset classes
+remap_mscoco_category: False
+
+train_dataloader:
+  type: DataLoader
+  dataset:
+    type: CocoDetection
+    img_folder: /content/drive/MyDrive/dataset/images/train
+    ann_file: /content/drive/MyDrive/dataset/annotations/xray_train.json
+    return_masks: False
+    transforms:
+      type: Compose
+      ops:
+        - type: CLAHE
+          clip_limit: 4.0
+          tile_grid_size: [8, 8]
+          p: 0.5
+
+        - type: RandomPhotometricDistortCLAHE
+          p: 0.5
+        
+        - type: Resize_CLAHE
+          size: [640, 640]
+          
+        - type: NormalizeImage_CLAHE
+          mean: [0.485, 0.456, 0.406]
+          std: [0.229, 0.224, 0.225]
+          
+        - type: Permute_CLAHE
+  shuffle: True
+  num_workers: 4
+  drop_last: True
+  collate_fn:
+    type: BatchImageCollateFunction
+
+
+val_dataloader:
+  type: DataLoader
+  dataset:
+    type: CocoDetection
+    img_folder: /content/drive/MyDrive/dataset/images/easy
+    ann_file: /content/drive/MyDrive/dataset/annotations/xray_test_easy.json
+    return_masks: False
+    transforms:
+      type: Compose
+      ops:
+        - type: CLAHE
+          clip_limit: 4.0
+          tile_grid_size: [8, 8]
+          p: 0.5
+
+        - type: RandomPhotometricDistortCLAHE
+          p: 0.5
+        
+        - type: Resize_CLAHE
+          size: [640, 640]
+          
+        - type: NormalizeImage_CLAHE
+          mean: [0.485, 0.456, 0.406]
+          std: [0.229, 0.224, 0.225]
+          
+        - type: Permute_CLAHE
+  shuffle: False
+  num_workers: 4
+  drop_last: False
+  collate_fn:
+    type: BatchImageCollateFunction
