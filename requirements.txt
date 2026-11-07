@@ -1,5 +1,6 @@
 torch
 torchvision
+torchaudio
 faster-coco-eval>=1.6.5
 PyYAML
 tensorboard
@@ -7,3 +8,5 @@ scipy
 calflops
 transformers
 albumentations
+loguru
+timm

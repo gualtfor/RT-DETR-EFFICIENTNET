@@ -1,11 +1,11 @@
 import torch.nn as nn
 import timm
-from ...core import register
+from ..core import register
 from loguru import logger
 
 __all__ = ['EfficientNetV2']
 
-@register
+@register()
 class EfficientNetV2(nn.Module):
     def __init__(self, model_name='efficientnetv2_s', pretrained=True, out_indices=(2, 3, 4), freeze_at=-1):
         super().__init__()
