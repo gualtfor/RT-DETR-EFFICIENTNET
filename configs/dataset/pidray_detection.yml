@@ -11,8 +11,8 @@ train_dataloader:
   type: DataLoader
   dataset:
     type: CocoDetection
-    img_folder: /content/drive/MyDrive/dataset/PIDray/train
-    ann_file: /content/drive/MyDrive/dataset/PIDray/annotations/train.json
+    img_folder: /content/dataset/PIDray/train
+    ann_file: /content/dataset/PIDray/annotations/train.json
     return_masks: False
     transforms:
       type: Compose
@@ -44,8 +44,8 @@ val_dataloader:
   type: DataLoader
   dataset:
     type: CocoDetection
-    img_folder: /content/drive/MyDrive/dataset/PIDray/test
-    ann_file: /content/drive/MyDrive/dataset/PIDray/annotations/test.json
+    img_folder: /content/dataset/PIDray/test
+    ann_file: /content/dataset/PIDray/annotations/test.json
     return_masks: False
     transforms:
       type: Compose
