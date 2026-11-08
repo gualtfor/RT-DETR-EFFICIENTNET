@@ -242,7 +242,7 @@ class TransformerEncoderLayer(nn.Module):
 
     @staticmethod
     def with_pos_embed(tensor, pos_embed):
-        return tensor if pos_embed is None else tensor + pos_embed
+        return tensor if pos_embed is None else tensor + pos_embed.to(tensor.device)
 
     def forward(self, src, src_mask=None, pos_embed=None) -> torch.Tensor:
         residual = src

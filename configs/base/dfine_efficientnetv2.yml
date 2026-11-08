@@ -21,13 +21,13 @@ flat_epoch: 4000000
 no_aug_epoch: 0
 
 EfficientNetV2:
-  model_name: efficientnetv2_s
+  model_name: tf_efficientnetv2_s.in21k_ft_in1k
   pretrained: True
   out_indices: [2, 3, 4]
   freeze_at: -1
 
 HybridEncoder:
-  in_channels: [512, 1024, 2048]
+  in_channels: [64, 160, 256]
   feat_strides: [8, 16, 32]
 
   # intra

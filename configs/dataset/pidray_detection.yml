@@ -4,15 +4,15 @@ evaluator:
   type: CocoEvaluator
   iou_types: ['bbox', ]
 
-num_classes: 15 # your dataset classes
+num_classes: 12 # your dataset classes
 remap_mscoco_category: False
 
 train_dataloader:
   type: DataLoader
   dataset:
     type: CocoDetection
-    img_folder: /content/drive/MyDrive/dataset/images/train
-    ann_file: /content/drive/MyDrive/dataset/annotations/xray_train.json
+    img_folder: /content/drive/MyDrive/dataset/PIDray/train
+    ann_file: /content/drive/MyDrive/dataset/PIDray/annotations/train.json
     return_masks: False
     transforms:
       type: Compose
@@ -44,8 +44,8 @@ val_dataloader:
   type: DataLoader
   dataset:
     type: CocoDetection
-    img_folder: /content/drive/MyDrive/dataset/images/easy
-    ann_file: /content/drive/MyDrive/dataset/annotations/xray_test_easy.json
+    img_folder: /content/drive/MyDrive/dataset/PIDray/test
+    ann_file: /content/drive/MyDrive/dataset/PIDray/annotations/test.json
     return_masks: False
     transforms:
       type: Compose

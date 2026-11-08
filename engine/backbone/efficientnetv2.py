@@ -7,7 +7,7 @@ __all__ = ['EfficientNetV2']
 
 @register()
 class EfficientNetV2(nn.Module):
-    def __init__(self, model_name='efficientnetv2_s', pretrained=True, out_indices=(2, 3, 4), freeze_at=-1):
+    def __init__(self, model_name='tf_efficientnetv2_s.in21k_ft_in1k', pretrained=True, out_indices=(2, 3, 4), freeze_at=-1):
         super().__init__()
         self.model = timm.create_model(
             model_name=model_name,
@@ -33,4 +33,4 @@ class EfficientNetV2(nn.Module):
                 for param in child.parameters():
                     param.requires_grad = False
 
-# efficientnetv2_s efficientnetv2_m
+# tf_efficientnetv2_s.in21k_ft_in1k tf_efficientnetv2_m.in21k_ft_in1k
