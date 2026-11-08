@@ -37,6 +37,11 @@ class CocoDetection(torchvision.datasets.CocoDetection, DetDataset):
         self.ann_file = ann_file
         self.return_masks = return_masks
         self.remap_mscoco_category = remap_mscoco_category
+        
+        self.category2label = {
+                    category_id: index
+                    for index, category_id in enumerate(sorted(self.coco.cats.keys()))
+                }
 
     def __getitem__(self, idx):
         img, target = self.load_item(idx)
@@ -52,7 +57,7 @@ class CocoDetection(torchvision.datasets.CocoDetection, DetDataset):
         if self.remap_mscoco_category:
             image, target = self.prepare(image, target, category2label=mscoco_category2label)
         else:
-            image, target = self.prepare(image, target)
+            image, target = self.prepare(image, target, category2label=self.category2label)
 
         target['idx'] = torch.tensor([idx])
 

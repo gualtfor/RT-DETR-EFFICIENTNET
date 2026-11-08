@@ -16,6 +16,7 @@ from .box_ops import box_cxcywh_to_xyxy, generalized_box_iou
 
 from ..core import register
 import numpy as np
+from loguru import logger
 
 
 @register()
@@ -82,6 +83,16 @@ class HungarianMatcher(nn.Module):
         # Also concat the target labels and boxes
         tgt_ids = torch.cat([v["labels"] for v in targets])
         tgt_bbox = torch.cat([v["boxes"] for v in targets])
+        
+        logger.info("Model classes:", out_prob.shape[-1])
+        logger.info("Target labels:", torch.unique(tgt_ids).cpu().tolist())
+
+        if tgt_ids.numel() > 0:
+            assert tgt_ids.min() >= 0, "Negative class ID"
+            assert tgt_ids.max() < out_prob.shape[-1], (
+                f"Target class {tgt_ids.max().item()} exceeds "
+                f"the maximum valid index {out_prob.shape[-1] - 1}"
+            )
 
         # Compute the classification cost. Contrary to the loss, we don't use the NLL,
         # but approximate it in 1 - proba[target class].
