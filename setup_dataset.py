@@ -1,3 +1,4 @@
+import argparse
 import shutil
 import tarfile
 from pathlib import Path
@@ -34,3 +35,13 @@ def setup_dataset(source: str, local_archive: str, destination: str) -> None:
         tar.extractall(path=destination, filter="data")
 
     logger.info("Extraction completed.")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--source", required=True)
+    parser.add_argument("--local_archive", type=str, required=True)
+    parser.add_argument("--destination", type=str, required=True)
+
+    args = parser.parse_args()
+
+    setup_dataset(args.source, args.local_archive, args.destination)

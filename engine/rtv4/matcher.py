@@ -83,9 +83,6 @@ class HungarianMatcher(nn.Module):
         # Also concat the target labels and boxes
         tgt_ids = torch.cat([v["labels"] for v in targets])
         tgt_bbox = torch.cat([v["boxes"] for v in targets])
-        
-        logger.info("Model classes: {}", out_prob.shape[-1])
-        logger.info("Target labels: {}", torch.unique(tgt_ids).cpu().tolist())
 
         if tgt_ids.numel() > 0:
             assert tgt_ids.min() >= 0, "Negative class ID"
