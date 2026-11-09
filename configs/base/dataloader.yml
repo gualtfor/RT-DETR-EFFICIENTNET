@@ -4,6 +4,7 @@ train_dataloader:
     transforms:
       ops:
         - {type: RandomPhotometricDistort, p: 0.5}
+        - {type: 'CLAHE', clip_limit: 4.0, tile_grid_size: [8, 8], p: 0.5}
         - {type: RandomZoomOut, fill: 0}
         - {type: RandomIoUCrop, p: 0.8}
         - {type: SanitizeBoundingBoxes, min_size: 1}
@@ -24,7 +25,7 @@ train_dataloader:
     stop_epoch: 72 # epoch in [72, ~) stop `multiscales`
 
   shuffle: True
-  total_batch_size: 12 # total batch size equals to 32 (4 * 8)
+  total_batch_size: 10 # total batch size equals to 32 (4 * 8)
   num_workers: 2
 
 
@@ -35,5 +36,5 @@ val_dataloader:
         - {type: Resize, size: [640, 640], }
         - {type: ConvertPILImage, dtype: 'float32', scale: True}
   shuffle: False
-  total_batch_size: 12
+  total_batch_size: 10
   num_workers: 2
