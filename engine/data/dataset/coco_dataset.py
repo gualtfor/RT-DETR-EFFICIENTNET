@@ -16,6 +16,7 @@ import faster_coco_eval.core.mask as coco_mask
 from ._dataset import DetDataset
 from .._misc import convert_to_tv_tensor
 from ...core import register
+from loguru import logger
 
 torchvision.disable_beta_transforms_warning()
 faster_coco_eval.init_as_pycocotools()
@@ -37,11 +38,6 @@ class CocoDetection(torchvision.datasets.CocoDetection, DetDataset):
         self.ann_file = ann_file
         self.return_masks = return_masks
         self.remap_mscoco_category = remap_mscoco_category
-        
-        self.category2label = {
-                    category_id: index
-                    for index, category_id in enumerate(sorted(self.coco.cats.keys()))
-                }
 
     def __getitem__(self, idx):
         img, target = self.load_item(idx)
@@ -57,7 +53,7 @@ class CocoDetection(torchvision.datasets.CocoDetection, DetDataset):
         if self.remap_mscoco_category:
             image, target = self.prepare(image, target, category2label=mscoco_category2label)
         else:
-            image, target = self.prepare(image, target, category2label=self.category2label)
+            image, target = self.prepare(image, target)
 
         target['idx'] = torch.tensor([idx])
 
@@ -181,7 +177,21 @@ class ConvertCocoPolysToMask(object):
 
         return image, target
 
-
+mscoco_category2name = {
+    1: 'Baton',
+    2: 'Pliers',
+    3: 'Hammer',
+    4: 'Powerbank',
+    5: 'Scissors',
+    6: 'Wrench',
+    7: 'Gun',
+    8: 'Bullet',
+    9: 'Sprayer',
+    10: 'HandCuffs',
+    11: 'Knife',
+    12: 'Lighter',
+}
+'''
 mscoco_category2name = {
     1: 'person',
     2: 'bicycle',
@@ -263,7 +273,7 @@ mscoco_category2name = {
     88: 'teddy bear',
     89: 'hair drier',
     90: 'toothbrush'
-}
+}'''
 
 mscoco_category2label = {k: i for i, k in enumerate(mscoco_category2name.keys())}
 mscoco_label2category = {v: k for k, v in mscoco_category2label.items()}
