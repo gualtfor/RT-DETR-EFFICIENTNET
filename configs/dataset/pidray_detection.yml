@@ -16,7 +16,20 @@ train_dataloader:
     return_masks: False
     transforms:
       type: Compose
-      ops: ~
+      ops:
+        - type: CLAHE
+          clip_limit: 4.0
+          tile_grid_size: [8, 8]
+          p: 0.5
+        
+        - type: Resize_CLAHE
+          size: [640, 640]
+          
+        - type: NormalizeImage_CLAHE
+          mean: [0.485, 0.456, 0.406]
+          std: [0.229, 0.224, 0.225]
+          
+        - type: Permute_CLAHE
   shuffle: True
   num_workers: 2
   drop_last: True
@@ -33,7 +46,20 @@ val_dataloader:
     return_masks: False
     transforms:
       type: Compose
-      ops: ~
+      ops:
+        - type: CLAHE
+          clip_limit: 4.0
+          tile_grid_size: [8, 8]
+          p: 0.5
+        
+        - type: Resize_CLAHE
+          size: [640, 640]
+          
+        - type: NormalizeImage_CLAHE
+          mean: [0.485, 0.456, 0.406]
+          std: [0.229, 0.224, 0.225]
+          
+        - type: Permute_CLAHE
   shuffle: False
   num_workers: 2
   drop_last: False

@@ -8,4 +8,4 @@ if [ ! -d /content/dinov3 ]; then
   git clone https://github.com/facebookresearch/dinov3.git /content/dinov3
 fi
 pip -q uninstall -y torch torchvision torchaudio onnxruntime onnxruntime-gpu
-!pip -q install torch torchvision torchaudio torchmetrics
+pip -q install torch torchvision torchaudio torchmetrics

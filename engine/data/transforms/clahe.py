@@ -1,53 +1,34 @@
-import albumentations as A
-from albumentations.pytorch import ToTensorV2
+import torch
+import numpy as np
 import cv2
+import PIL.Image
+from typing import Any
+
+import torchvision.transforms.v2 as T
 from engine.core import register
 
 @register()
-class CLAHE(object):
+class CLAHE(T.Transform):
     def __init__(self, clip_limit=4.0, tile_grid_size=(8, 8), p=0.5):
-        self.transform = A.Compose([
-            A.CLAHE(
-                clip_limit=clip_limit, 
-                tile_grid_size=tuple(tile_grid_size), 
-                p=p
-            )
-        ], bbox_params=A.BboxParams(format='pascal_voc', label_fields=['labels']))
+        super().__init__()
+        self.clip_limit = clip_limit
+        self.tile_grid_size = tuple(tile_grid_size)
+        self.p = p
+        self.clahe_eng = cv2.createCLAHE(
+            clipLimit=self.clip_limit, 
+            tileGridSize=self.tile_grid_size
+        )
 
-    def __call__(self, sample):
-        image = sample['image']
-        bboxes = sample.get('bboxes', [])
-        labels = sample.get('labels', [])
-        if len(bboxes) > 0:
-            augmented = self.transform(image=image, bboxes=bboxes, labels=labels)
-            sample['image'] = augmented['image']
-            sample['bboxes'] = augmented['bboxes']
-            sample['labels'] = augmented['labels']
-        else:
-            augmented = self.transform(image=image)
-            sample['image'] = augmented['image']
+    def transform(self, inpt: Any, params: dict) -> Any:
+        if torch.rand(1).item() > self.p:
+            return inpt
+                
+        img_np = np.array(inpt.convert("RGB"))
 
-        return sample
+        lab = cv2.cvtColor(img_np, cv2.COLOR_RGB2LAB)
+        l, a, b = cv2.split(lab)
+        l_clahe = self.clahe_eng.apply(l)
+        merged = cv2.merge((l_clahe, a, b))
+        out_np = cv2.cvtColor(merged, cv2.COLOR_LAB2RGB)
 
-@register()
-class RandomPhotometricDistortCLAHE(object):
-    def __init__(self, p=0.5):
-        self.transform = A.Compose([
-            A.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1, p=p)
-        ], bbox_params=A.BboxParams(format='pascal_voc', label_fields=['labels']))
-
-    def __call__(self, sample):
-        image = sample['image']
-        bboxes = sample.get('bboxes', [])
-        labels = sample.get('labels', [])
-
-        if len(bboxes) > 0:
-            augmented = self.transform(image=image, bboxes=bboxes, labels=labels)
-            sample['image'] = augmented['image']
-            sample['bboxes'] = augmented['bboxes']
-            sample['labels'] = augmented['labels']
-        else:
-            augmented = self.transform(image=image)
-            sample['image'] = augmented['image']
-
-        return sample
+        return PIL.Image.fromarray(out_np)
