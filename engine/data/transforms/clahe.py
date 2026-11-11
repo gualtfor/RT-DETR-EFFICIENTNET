@@ -26,6 +26,12 @@ class CLAHE(T.Transform):
         )
 
     def transform(self, inpt: Any, params: dict) -> Any:
+        if isinstance(
+            inpt,
+            (tv_tensors.BoundingBoxes, tv_tensors.Mask)
+        ):
+            return inpt
+        
         if not isinstance(inpt, (torch.Tensor, PIL.Image.Image)):
             return inpt
 

@@ -43,6 +43,7 @@ class CocoDetection(torchvision.datasets.CocoDetection, DetDataset):
         img, target = self.load_item(idx)
         if self._transforms is not None:
             img, target, _ = self._transforms(img, target, self)
+            
         return img, target
 
     def load_item(self, idx):
