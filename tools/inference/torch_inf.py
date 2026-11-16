@@ -16,6 +16,20 @@ import cv2  # Added for video processing
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 from engine.core import YAMLConfig
 
+class_names = [
+        'Baton',
+        'Pliers',
+        'Hammer',
+        'Powerbank',
+        'Scissors',
+        'Wrench',
+        'Gun',
+        'Bullet',
+        'Sprayer',
+        'HandCuffs',
+        'Knife',
+        'Lighter',
+    ]
 
 def draw(images, labels, boxes, scores, thrh=0.4):
     for i, im in enumerate(images):
@@ -27,8 +41,10 @@ def draw(images, labels, boxes, scores, thrh=0.4):
         scrs = scr[scr > thrh]
 
         for j, b in enumerate(box):
+            class_id = int(lab[j].item())
+            class_name = class_names[class_id]
             draw.rectangle(list(b), outline='red')
-            draw.text((b[0], b[1]), text=f"{lab[j].item()} {round(scrs[j].item(), 2)}", fill='blue', )
+            draw.text((b[0], b[1]), text=f"{class_name} {round(scrs[j].item(), 2)}", fill='blue', )
 
         im.save('torch_results.jpg')
 

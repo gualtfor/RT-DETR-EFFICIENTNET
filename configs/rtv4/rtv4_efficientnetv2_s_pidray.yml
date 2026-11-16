@@ -42,15 +42,15 @@ optimizer:
 
 epoches: 36
 
-flat_epoch: 24
-no_aug_epoch: 12
+flat_epoch: 2
+no_aug_epoch: 3
 
 train_dataloader:
   dataset:
     transforms:
       policy:
-        epoch: [4, 10, 24]
+        epoch: [3, 10, 24]
 
   collate_fn:
-    mixup_epochs: [4, 24]
+    mixup_epochs: [3, 24]
     stop_epoch: 30

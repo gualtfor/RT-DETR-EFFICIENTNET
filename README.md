@@ -1,446 +1,340 @@
-<h2 align="center">RT-DETRv4: Painlessly Furthering Real-Time Object Detection with Vision Foundation Models</h2>
-<p align="center">
-    <a href="https://github.com/RT-DETRs/RT-DETRv4/blob/main/LICENSE">
-        <img alt="license" src="https://img.shields.io/github/license/RT-DETRs/RT-DETRv4">
-    </a>
-    <a href="https://github.com/RT-DETRs/RT-DETRv4/pulls">
-        <img alt="prs" src="https://img.shields.io/github/issues-pr/RT-DETRs/RT-DETRv4">
-    </a>
-    <a href="https://github.com/RT-DETRs/RT-DETRv4/issues">
-        <img alt="issues" src="https://img.shields.io/github/issues/RT-DETRs/RT-DETRv4?color=pink">
-    </a>
-    <a href="https://github.com/RT-DETRs/RT-DETRv4">
-        <img alt="stars" src="https://img.shields.io/github/stars/RT-DETRs/RT-DETRv4">
-    </a>
-    <a href="https://arxiv.org/abs/2510.25257">
-        <img alt="arXiv" src="https://img.shields.io/badge/arXiv-2510.25257-red">
-    </a>
-    <a href="mailto:zjliao25@stu.pku.edu.cn">
-        <img alt="email" src="https://img.shields.io/badge/contact-email-yellow">
-    </a>
-</p>
+# RT-DETRv4 with EfficientNetV2 for X-ray Threat Detection
 
-<p align="center">
-  <strong>🎉 We are excited to announce that RT-DETRv4 has been accepted to ECCV 2026!</strong>
-</p>
+**An experimental implementation of RT-DETRv4 integrating an EfficientNetV2 backbone and DINOv3 teacher model for detecting prohibited objects in X-ray security images.**
+
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-ee4c2c)](https://pytorch.org/)
+[![Architecture](https://img.shields.io/badge/Architecture-RT--DETRv4-green)](https://github.com/AIMIA-PKU/RT-DETRv4)
+[![Dataset](https://img.shields.io/badge/Dataset-PIDray-orange)](https://github.com/)
 
 ---
 
-This is the official implementation of the paper:
-* [RT-DETRv4: Painlessly Furthering Real-Time Object Detection with Vision Foundation Models](https://arxiv.org/abs/2510.25257)
+## Overview
 
+This repository presents a modified implementation of **RT-DETRv4** for object detection in X-ray security images. The project explores the integration of an EfficientNetV2 backbone and DINOv3 as a teacher model to improve feature extraction and object detection performance.
 
-## 🚀 Overview
+The main objective is to investigate the application of modern deep learning architectures to the detection and localization of prohibited objects in security screening environments, particularly in scenarios involving overlapping and partially occluded objects.
 
-**RT-DETRv4 is the new version of the state-of-the-art real-time object detector family, RT-DETR.** It introduces a cost-effective and adaptable distillation framework that leverages the powerful representations of Vision Foundation Models (VFMs) to enhance lightweight detectors.
-<p align="center">
-  <img src="./figures/rtv4_ap_latency.png" alt="Image" width="49%">
-</p>
-<details open>
-<summary> 🎥 Demo: Furious 7 </summary>
+The implementation includes the following modifications:
 
-We challenge **RT-DETRv4** with the high-speed scene from *Furious 7*. Even under extreme motion blur, rapid camera pans, and chaotic lighting, the model maintains consistent tracking and high recall, proving its reliability in dynamic environments.
+- **EfficientNetV2 backbone:** Replaces the original backbone with an EfficientNetV2 architecture to extract multi-scale visual features.
+- **DINOv3 teacher model:** Integrates a Vision Foundation Model to support knowledge distillation during training.
+- **CLAHE preprocessing:** Applies Contrast Limited Adaptive Histogram Equalization to improve local image contrast and enhance visual characteristics.
+- **PIDray dataset:** Uses an X-ray security dataset containing 12 categories of prohibited objects.
+- **Video inference:** Supports object detection and visualization on video sequences, displaying bounding boxes, predicted classes, and confidence scores.
 
-<div align="center">
+This implementation is based on the original RT-DETRv4 framework, with modifications to the backbone, preprocessing pipeline, and experimental configuration.
 
-https://github.com/user-attachments/assets/e610b13b-a6bb-420b-ac6f-a752f61d0d84
+## Architecture and Contributions
 
-</div>
+The proposed implementation combines three main components:
 
-</details>
+| Component | Implementation |
+|---|---|
+| Detection architecture | RT-DETRv4 |
+| Feature extraction | EfficientNetV2-S |
+| Teacher model | DINOv3 ViT-B/16 |
+| Image preprocessing | CLAHE |
+| Input resolution | 640 × 640 |
+| Detection framework | PyTorch |
+| Dataset | PIDray |
 
-## ⚡ Performance
+### EfficientNetV2 Backbone
 
-RT-DETRv4 achieves new state-of-the-art results on the COCO dataset, outperforming previous real-time detectors.
+EfficientNetV2-S is integrated as the feature extraction backbone. Features are extracted from three intermediate stages, providing multi-scale representations for the detection architecture.
 
-| Model | AP | AP50 | AP75 | Latency (T4) | FPS (T4) | Config | Log | Checkpoint |
-| :--- | :---: | :---: | :---: | :---: | :---: |:---------------------------------------------:|:----------------------------:|:---:|
-| RT-DETRv4-S | 49.8 | 67.1 | 54.0 | 3.66 ms | 273 | [yml](./configs/rtv4/rtv4_hgnetv2_s_coco.yml) | [log](./logs/RTv4-S-hgnet.log) | [ckpt](https://drive.google.com/file/d/1jDAVxblqRPEWed7Hxm6GwcEl7zn72U6z) |
-| RT-DETRv4-M | 53.7 | 71.0 | 58.4 | 5.91 ms | 169 | [yml](./configs/rtv4/rtv4_hgnetv2_m_coco.yml) | [log](./logs/RTv4-M-hgnet.log) | [ckpt](https://drive.google.com/file/d/1O-YpP4X-quuOXbi96y2TKkztbjroP5mX) |
-| RT-DETRv4-L | 55.4 | 73.0 | 60.3 | 8.07 ms | 124 | [yml](./configs/rtv4/rtv4_hgnetv2_l_coco.yml) | [log](./logs/RTv4-L-hgnet.log) | [ckpt](https://drive.google.com/file/d/1shO9EzZvXZyKedE2urLsN4dwEv8Jqa_8) |
-| RT-DETRv4-X | 57.0 | 74.6 | 62.1 | 12.90 ms | 78 | [yml](./configs/rtv4/rtv4_hgnetv2_x_coco.yml) | [log](./logs/RTv4-X-hgnet.log) | [ckpt](https://drive.google.com/file/d/19gnkMTgFveJsrOvSmEPQXCTG6v9oQHN3) |
-## 📣 News
+The backbone produces feature maps with the following channel dimensions:
 
-  * **[2026.06.18]** 🎉 RT-DETRv4 has been accepted to **ECCV 2026**! We sincerely thank all contributors and the community for your support!
-  * **[2025.11.17]** Code, configs and checkpoints fully released! Thanks for your attention, and feel free to ask any questions!
-  * **[2025.10.30]** Repo created, and code will be open-sourced very soon!
+- Stage 1: 64 channels
+- Stage 2: 160 channels
+- Stage 3: 256 channels
 
-## Content
+These representations are passed to the detection encoder for subsequent object localization and classification.
 
-  * [1. Getting Started](#1-getting-started)
-  * [2. Usage](#2-usage)
-  * [3. Tools](#3-tools)
-  * [4. Citation](#4-citation)
-  * [5. Acknowledgement](#5-acknowledgement)
+### DINOv3 Teacher Model
 
------
+DINOv3 ViT-B/16 is incorporated as a teacher model within the RT-DETRv4 knowledge distillation framework.
 
-> This repository also supports the reproduction of [DEIM](./configs/deim/), [D-FINE](./configs/dfine/), and [RT-DETRv2](./configs/rtv2/). Simply run the corresponding configuration files.
+The objective is to transfer richer visual representations from a pretrained Vision Foundation Model to the detection architecture during training.
 
-## 1\. Getting Started
+### CLAHE Preprocessing
 
-### Setup
+Contrast Limited Adaptive Histogram Equalization (CLAHE) is incorporated into the preprocessing pipeline to improve local contrast in X-ray images.
 
-```shell
-conda create -n rtv4 python=3.11.9
-conda activate rtv4
+Configuration:
+
+- Clip limit: 4.0
+- Tile grid size: 8 × 8
+- Application probability: 0.5
+
+This approach investigates whether local contrast enhancement can improve the representation of objects with low visual contrast and overlapping structures.
+
+---
+
+## Dataset: PIDray
+
+The experiments were conducted using the PIDray dataset, a public X-ray security inspection dataset designed for prohibited-item detection.
+
+The dataset contains 124,486 images and 12 object categories.
+
+The evaluated categories include:
+
+1. Baton
+2. Pliers
+3. Hammer
+4. Powerbank
+5. Scissors
+6. Wrench
+7. Gun
+8. Bullet
+9. Sprayer
+10. Handcuffs
+11. Knife
+12. Lighter
+
+The dataset provides different difficulty levels, including Easy, Hard, and Hidden subsets, allowing the evaluation of detection performance under different levels of visual complexity and object occlusion.
+
+---
+
+## Experimental Results
+
+The proposed implementation was evaluated using the COCO evaluation protocol.
+
+The primary evaluation metrics are:
+
+- **AP@[0.50:0.95]:** Average Precision calculated across IoU thresholds from 0.50 to 0.95.
+- **AP50:** Average Precision at an Intersection over Union threshold of 0.50.
+
+### Quantitative Results
+
+The following table presents the obtained results for the different PIDray subsets.
+
+| PIDray subset | AP@[0.50:0.95] | AP50 |
+|---|---:|---:|
+| Easy | 73.3% | 81.9% |
+| Hard | 60.8% | 77.1% |
+| Hidden | 45.6% | 60.9% |
+
+### Results Interpretation
+
+The results demonstrate different detection performance depending on the difficulty of the evaluated images.
+
+The Easy subset achieved the highest performance, with an AP of 73.3%. The Hard subset achieved an AP of 60.8%, indicating a reduction in detection performance as the visual complexity increases.
+
+The Hidden subset presented the greatest challenge, achieving an AP of 45.6%. This reduction highlights the difficulty of detecting objects under occlusion and overlapping conditions, which remain important challenges in X-ray security inspection.
+
+These results provide an experimental reference for evaluating the integration of EfficientNetV2, DINOv3, and CLAHE within the RT-DETRv4 framework.
+
+*Note: These are experimental results obtained with this implementation on PIDray. They are not the original RT-DETRv4 results reported on COCO.*
+
+---
+
+## Model Complexity
+
+The implemented detection model has the following reported computational characteristics:
+
+| Metric | Value |
+|---|---:|
+| Trainable parameters | 28.09 M |
+| GFLOPs | 65.04 |
+| GMACs | 32.35 |
+| Input resolution | 640 × 640 |
+
+These values describe model complexity and should not be interpreted as measured inference latency or throughput.
+
+---
+
+## Video Demonstration
+
+The following demonstration presents the model performing object detection on an X-ray video sequence.
+
+The inference visualization includes:
+
+- Bounding boxes around detected objects.
+- Predicted object categories.
+- Confidence scores for each detection.
+- Frame-by-frame object detection.
+
+### RT-DETRv4 + EfficientNetV2 inference
+
+**Video:** `assets/torch_results.mp4`
+
+[▶ Watch the custom X-ray object detection demonstration](assets/torch_results.mp4)
+
+The demonstration uses the trained checkpoint and the custom PyTorch inference implementation.
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/gualtfor/RT-DETR-EFFICIENTNET.git
+
+cd RT-DETR-EFFICIENTNET
+```
+
+Install the dependencies:
+
+```bash
 pip install -r requirements.txt
 ```
 
-### Data Preparation
+For Google Colab, the repository also includes:
 
-<details>
-<summary> COCO2017 Dataset </summary>
-
-1.  Download COCO2017 from [OpenDataLab](https://opendatalab.com/OpenDataLab/COCO_2017) or [COCO](https://cocodataset.org/#download).
-2.  Modify paths in [coco\_detection.yml](./configs/dataset/coco_detection.yml)
-
-```yaml
-train_dataloader:
-    img_folder: /data/COCO2017/train2017/
-    ann_file: /data/COCO2017/annotations/instances_train2017.json
-val_dataloader:
-    img_folder: /data/COCO2017/val2017/
-    ann_file: /data/COCO2017/annotations/instances_val2017.json
+```bash
+bash setup_colab.sh
 ```
 
-</details>
+Make sure the PyTorch and CUDA versions are compatible with your GPU environment.
 
-<details>
-<summary>Custom Dataset</summary>
+## Inference
 
-To train on your custom dataset, you need to organize it in the COCO format. Follow the steps below to prepare your dataset:
+The implementation supports image and video inference using the trained PyTorch checkpoint.
 
-1.  **Set `remap_mscoco_category` to `False`:**
+Example:
 
-    This prevents the automatic remapping of category IDs to match the MSCOCO categories.
-
-    ```yaml
-    remap_mscoco_category: False
-    ```
-
-2.  **Organize Images:**
-
-    Structure your dataset directories as follows:
-
-    ```shell
-    dataset/
-    ├── images/
-    │   ├── train/
-    │   │   ├── image1.jpg
-    │   │   ├── image2.jpg
-    │   │   └── ...
-    │   ├── val/
-    │   │   ├── image1.jpg
-    │   │   ├── image2.jpg
-    │   │   └── ...
-    └── annotations/
-        ├── instances_train.json
-        ├── instances_val.json
-        └── ...
-    ```
-
-      * **`images/train/`**: Contains all training images.
-      * **`images/val/`**: Contains all validation images.
-      * **`annotations/`**: Contains COCO-formatted annotation files.
-
-3.  **Convert Annotations to COCO Format:**
-
-    If your annotations are not already in COCO format, you'll need to convert them. You can use the following Python script as a reference or utilize existing tools:
-
-    ```python
-    import json
-
-    def convert_to_coco(input_annotations, output_annotations):
-        # Implement conversion logic here
-        pass
-
-    if __name__ == "__main__":
-        convert_to_coco('path/to/your_annotations.json', 'dataset/annotations/instances_train.json')
-    ```
-
-4.  **Update Configuration Files:**
-
-    Modify your [custom\_detection.yml](./configs/dataset/custom_detection.yml).
-
-    ```yaml
-    task: detection
-
-    evaluator:
-      type: CocoEvaluator
-      iou_types: ['bbox', ]
-
-    num_classes: 777 # your dataset classes
-    remap_mscoco_category: False
-
-    train_dataloader:
-      type: DataLoader
-      dataset:
-        type: CocoDetection
-        img_folder: /data/yourdataset/train
-        ann_file: /data/yourdataset/train/train.json
-        return_masks: False
-        transforms:
-          type: Compose
-          ops: ~
-      shuffle: True
-      num_workers: 4
-      drop_last: True
-      collate_fn:
-        type: BatchImageCollateFunction
-
-    val_dataloader:
-      type: DataLoader
-      dataset:
-        type: CocoDetection
-        img_folder: /data/yourdataset/val
-        ann_file: /data/yourdataset/val/ann.json
-        return_masks: False
-        transforms:
-          type: Compose
-          ops: ~
-      shuffle: False
-      num_workers: 4
-      drop_last: False
-      collate_fn:
-        type: BatchImageCollateFunction
-    ```
-
-</details>
-
-### Teacher Model Preparation
-
-Our framework uses a pre-trained Vision Foundation Model (VFM) as the teacher. We use the **ViT-B/16-LVD-1689M** model from DINOv3.
-
-  * **Repository:** [DINOv3](https://github.com/facebookresearch/dinov3)
-  * **Weights:** [Downloads](https://ai.meta.com/resources/models-and-libraries/dinov3-downloads/)
-
-
-### Configuring DINOv3 Teacher
-
-Specify the paths to your local DINOv3 repository and the downloaded checkpoint in the model's configuration file `./configs/rtv4/rtv4_hgnetv2_${model}_coco.yml` and find the `teacher_model` section:
-
-```yaml
-teacher_model:
-  type: "DINOv3TeacherModel"
-  dinov3_repo_path: dinov3/
-  dinov3_weights_path: pretrain/dinov3_vitb16_pretrain_lvd1689m.pth
+```bash
+python tools/inference/torch_inf.py \
+    -c path/to/config.yml \
+    -r path/to/model.pth \
+    -i path/to/input_video.mp4 \
+    -d cuda:0
 ```
 
-Update the `dinov3_repo_path` and `dinov3_weights_path` to match your local setup.
+For image inference:
 
-## 2\. Usage
+```bash
+python tools/inference/torch_inf.py \
+    -c path/to/config.yml \
+    -r path/to/model.pth \
+    -i path/to/image.jpg \
+    -d cuda:0
+```
 
-<details open>
-<summary> COCO2017 </summary>
+The inference implementation generates an annotated output with the detected objects, their corresponding class names, and confidence scores.
 
-1.  Training
+## Repository Structure
 
-    ```shell
-    CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --master_port=7777 --nproc_per_node=4 train.py -c configs/rtv4/rtv4_hgnetv2_${model}_coco.yml --use-amp --seed=0
-    ```
+```text
+RT-DETR-EFFICIENTNET/
+│
+├── configs/
+│   └── ...                 # Model configurations
+│
+├── engine/
+│   └── ...                 # Training and evaluation engine
+│
+├── tools/
+│   ├── inference/
+│   │   └── ...             # Image and video inference
+│   └── ...
+│
+├── assets/
+│   └── torch_results.mp4   # Custom inference demonstration
+│
+├── requirements.txt
+├── setup_colab.sh
+├── setup_dataset.py
+├── train.py
+└── README.md
+```
 
-2.  Testing
+---
 
-    ```shell
-    CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --master_port=7777 --nproc_per_node=4 train.py -c configs/rtv4/rtv4_hgnetv2_${model}_coco.yml --test-only -r model.pth
-    ```
+## Acknowledgments
 
-3.  Tuning
+This project builds upon the contributions of researchers who have advanced real-time object detection, efficient convolutional neural networks, and self-supervised visual representation learning.
 
-    ```shell
-    CUDA_VISIBLE_DEVICES=0,1,2,3 torchrun --master_port=7777 --nproc_per_node=4 train.py -c configs/rtv4/rtv4_hgnetv2_${model}_coco.yml --use-amp --seed=0 -t model.pth
-    ```
+We sincerely acknowledge the original authors and research teams behind the following works:
 
-</details>
+### 1. RT-DETRv4
 
-<details>
-<summary> Customizing Batch Size </summary>
+**Zijun Liao, Yian Zhao, Xin Shan, Yu Yan, Chang Liu, Lei Lu, Xiangyang Ji, and Jie Chen.**
 
-For example, if you want to double the total batch size when training RT-DETRv4-L on COCO2017, here are the steps you should follow:
+*RT-DETRv4: Painlessly Furthering Real-Time Object Detection with Vision Foundation Models.*
 
-1.  **Modify your [dataloader.yml](./configs/base/dataloader.yml)** to increase the `total_batch_size`:
+We thank the RT-DETRv4 authors for developing and publicly releasing the detection framework that serves as the foundation of this project.
 
-    ```yaml
-    train_dataloader:
-        total_batch_size: 64  # Previously it was 32, now doubled
-    ```
+- [Official GitHub Repository](https://github.com/AIMIA-PKU/RT-DETRv4)
+- [Research Paper](https://arxiv.org/abs/2510.25257)
 
-2.  **Modify your [rtv4\_hgnetv2\_l\_coco.yml](./configs/rtv4/rtv4_hgnetv2_l_coco.yml)**. Here’s how the key parameters should be adjusted:
+### 2. EfficientNetV2
 
-    ```yaml
-    optimizer:
-      type: AdamW
-      params:
-        -
-          params: '^(?=.*backbone)(?!.*norm|bn).*$'
-          lr: 0.000025  # doubled, linear scaling law
-        -
-          params: '^(?=.*(?:encoder|decoder))(?=.*(?:norm|bn)).*$'
-          weight_decay: 0.
+**Mingxing Tan and Quoc V. Le.**
 
-    lr: 0.0005  # doubled, linear scaling law
-    betas: [0.9, 0.999]
-    weight_decay: 0.0001  # need a grid search
+*EfficientNetV2: Smaller Models and Faster Training.*
 
-    ema:  # added EMA settings
-        decay: 0.9998  # adjusted by 1 - (1 - decay) * 2
-        warmups: 500  # halved
+We acknowledge the original authors for introducing an efficient convolutional neural network architecture that provides the backbone used in this implementation.
 
-    lr_warmup_scheduler:
-        warmup_duration: 250  # halved
-    ```
+- [Original Research Paper](https://proceedings.mlr.press/v139/tan21a.html)
+- [Official Google Research Implementation](https://github.com/google/automl/tree/master/efficientnetv2)
 
-</details>
+### 3. DINOv3
 
-<details>
-<summary> Customizing Input Size </summary>
+**Oriane Siméoni, Huy V. Vo, Maximilian Seitzer, Federico Baldassarre, Maxime Oquab, and collaborators at Meta AI Research.**
 
-If you'd like to train **RT-DETRv4** on COCO2017 with an input size of 320x320, follow these steps:
+*DINOv3.*
 
-1.  **Modify your [dataloader.yml](./configs/base/dataloader.yml)**:
+We sincerely thank the DINOv3 research team for developing and releasing this Vision Foundation Model. Its visual representations provide the teacher model used in the knowledge distillation framework explored in this project.
 
-    ```yaml
-    train_dataloader:
-      dataset:
-          transforms:
-              ops:
-                  - {type: Resize, size: [320, 320], }
-      collate_fn:
-          base_size: 320
+- [Official GitHub Repository](https://github.com/facebookresearch/dinov3)
+- [Research Paper](https://arxiv.org/abs/2508.10104)
 
-    val_dataloader:
-      dataset:
-          transforms:
-              ops:
-                  - {type: Resize, size: [320, 320], }
-    ```
+### Final Acknowledgment
 
-2.  **Modify your [rtv4\_base.yml](./base/rtv4_base.yml)** (or the relevant base config file):
+This repository would not have been possible without the open-source contributions and research advances made available by these research teams.
 
-    ```yaml
-    eval_spatial_size: [320, 320]
-    ```
+We recognize that the proposed implementation is an adaptation and experimental application of their original work. All original architectures, methods, and research contributions remain credited to their respective authors.
 
-</details>
+---
 
-## 3\. Tools
+## Citation
 
-<details>
-<summary> Deployment </summary>
+If you use this implementation in academic research, please cite the original works:
 
-1.  Setup
-
-    ```shell
-    pip install onnx onnxsim
-    ```
-
-2.  Export onnx
-
-    ```shell
-    python tools/deployment/export_onnx.py --check -c configs/rtv4/rtv4_hgnetv2_${model}_coco.yml -r model.pth
-    ```
-
-3.  Export [tensorrt](https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html)
-
-    ```shell
-    trtexec --onnx="model.onnx" --saveEngine="model.engine" --fp16
-    ```
-
-</details>
-
-<details>
-<summary> Inference (Visualization) </summary>
-
-1.  Setup
-
-    ```shell
-    pip install -r tools/inference/requirements.txt
-    ```
-
-2.  Inference (onnxruntime / tensorrt / torch)
-
-    Inference on images and videos is now supported.
-
-    ```shell
-    python tools/inference/onnx_inf.py --onnx model.onnx --input image.jpg  # or video.mp4
-    python tools/inference/trt_inf.py --trt model.engine --input image.jpg
-    python tools/inference/torch_inf.py -c configs/rtv4/rtv4_hgnetv2_${model}_coco.yml -r model.pth --input image.jpg --device cuda:0
-    ```
-
-</details>
-
-<details>
-<summary> Benchmark </summary>
-
-1.  Setup
-
-    ```shell
-    pip install -r tools/benchmark/requirements.txt
-    ```
-
-2.  Model FLOPs, MACs, and Params
-
-    ```shell
-    python tools/benchmark/get_info.py -c configs/rtv4/rtv4_hgnetv2_${model}_coco.yml
-    ```
-
-3.  TensorRT Latency
-
-    ```shell
-    python tools/benchmark/trt_benchmark.py --COCO_dir path/to/COCO2017 --engine_dir model.engine
-    ```
-
-</details>
-
-<details>
-<summary> Fiftyone Visualization </summary>
-
-1.  Setup
-
-    ```shell
-    pip install fiftyone
-    ```
-
-2.  Voxel51 Fiftyone Visualization ([fiftyone](https://github.com/voxel51/fiftyone))
-
-    ```shell
-    python tools/visualization/fiftyone_vis.py -c configs/rtv4/rtv4_hgnetv2_${model}_coco.yml -r model.pth
-    ```
-
-</details>
-
-<details>
-<summary> Others </summary>
-
-1.  Auto Resume Training
-
-    ```shell
-    bash tools/reference/safe_training.sh
-    ```
-
-2.  Converting Model Weights
-
-    ```shell
-    python tools/reference/convert_weight.py model.pth
-    ```
-
-</details>
-
-## 4\. Citation
-
-If you find this work helpful, please consider citing:
+**RT-DETRv4**
 
 ```bibtex
 @article{liao2025rtdetrv4,
   title={RT-DETRv4: Painlessly Furthering Real-Time Object Detection with Vision Foundation Models},
-  author={Zijun Liao and Yian Zhao and Xin Shan and Yu Yan and Chang Liu and Lei Lu and Xiangyang Ji and Jie Chen},
+  author={Liao, Zijun and Zhao, Yian and Shan, Xin and Yan, Yu and Liu, Chang and Lu, Lei and Ji, Xiangyang and Chen, Jie},
   journal={arXiv preprint arXiv:2510.25257},
   year={2025}
 }
 ```
 
-## 5\. Acknowledgement
+**EfficientNetV2**
 
-Our work is built upon [RT-DETR](https://github.com/lyuwenyu/RT-DETR), [D-FINE](https://github.com/Peterande/D-FINE), [DEIM](https://github.com/Intellindust-AI-Lab/DEIM) and Teacher Model [DINOv3](https://github.com/facebookresearch/dinov3).
-Thanks to these remarkable works!
+```bibtex
+@InProceedings{pmlr-v139-tan21a,
+  title={EfficientNetV2: Smaller Models and Faster Training},
+  author={Tan, Mingxing and Le, Quoc V.},
+  booktitle={International Conference on Machine Learning},
+  pages={10096--10106},
+  year={2021}
+}
+```
+
+**DINOv3**
+
+```bibtex
+@misc{simeoni2025dinov3,
+  title={DINOv3},
+  author={Siméoni, Oriane and Vo, Huy V. and Seitzer, Maximilian and others},
+  year={2025},
+  eprint={2508.10104},
+  archivePrefix={arXiv}
+}
+```
+
+---
+
+## Author and Project
+
+**Repository:** [RT-DETR-EFFICIENTNET](https://github.com/gualtfor/RT-DETR-EFFICIENTNET)
+
+**Author:** gualtfor
+
+This project is an independent experimental implementation focused on applying efficient object detection architectures to X-ray security inspection.
