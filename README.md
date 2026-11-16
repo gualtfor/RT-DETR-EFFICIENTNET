@@ -161,7 +161,7 @@ The inference visualization includes:
 
 <div align="center">
 
-[https://github.com/gualtfor/RT-DETR-EFFICIENTNET/blob/main/assets/torch_results.mp4](https://github.com/user-attachments/assets/46067d70-19a0-4036-b678-2c825a26af5b)
+https://github.com/user-attachments/assets/c55824e5-1e7e-4a2b-9872-12bb85bc248d
 
 </div>
 
