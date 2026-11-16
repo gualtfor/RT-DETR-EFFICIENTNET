@@ -1,11 +1,3 @@
-
-
-https://github.com/user-attachments/assets/46067d70-19a0-4036-b678-2c825a26af5b
-
-
-
-https://github.com/user-attachments/assets/b88c8c90-8b63-48f0-9fe0-0012c8617ac9
-
 # RT-DETRv4 with EfficientNetV2 for X-ray Threat Detection
 
 **An experimental implementation of RT-DETRv4 integrating an EfficientNetV2 backbone and DINOv3 teacher model for detecting prohibited objects in X-ray security images.**
@@ -169,7 +161,7 @@ The inference visualization includes:
 
 <div align="center">
 
-https://github.com/gualtfor/RT-DETR-EFFICIENTNET/blob/main/assets/torch_results.mp4
+[https://github.com/gualtfor/RT-DETR-EFFICIENTNET/blob/main/assets/torch_results.mp4](https://github.com/user-attachments/assets/46067d70-19a0-4036-b678-2c825a26af5b)
 
 </div>
 
