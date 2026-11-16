@@ -158,11 +158,8 @@ The inference visualization includes:
 ### RT-DETRv4 + EfficientNetV2 inference
 
 **Video:** `assets/torch_results.mp4`
-<div align="center">
-https://github.com/user-attachments/assets/8960bca6-b6df-4fa3-8b67-c80582da45da
-</div>
 
-</details>
+https://github.com/user-attachments/assets/8960bca6-b6df-4fa3-8b67-c80582da45da
 
 The demonstration uses the trained checkpoint and the custom PyTorch inference implementation.
 
