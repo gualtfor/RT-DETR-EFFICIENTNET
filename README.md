@@ -1,7 +1,3 @@
-
-
-https://github.com/user-attachments/assets/92fcebb4-cbcf-40ae-a78a-3e44414c7305
-
 # RT-DETRv4 with EfficientNetV2 for X-ray Threat Detection
 
 **An experimental implementation of RT-DETRv4 integrating an EfficientNetV2 backbone and DINOv3 teacher model for detecting prohibited objects in X-ray security images.**
@@ -162,14 +158,11 @@ The inference visualization includes:
 ### RT-DETRv4 + EfficientNetV2 inference
 
 **Video:** `assets/torch_results.mp4`
+<div align="center">
+https://github.com/user-attachments/assets/8960bca6-b6df-4fa3-8b67-c80582da45da
+</div>
 
-<video
-  src="https://github.com/user-attachments/assets/1cb09fb2-a8b6-487c-8be6-4121b5713abb"
-  controls
-  muted
-  playsinline
-  width="100%">
-</video>
+</details>
 
 The demonstration uses the trained checkpoint and the custom PyTorch inference implementation.
 
