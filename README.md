@@ -159,7 +159,13 @@ The inference visualization includes:
 
 **Video:** `assets/torch_results.mp4`
 
-[▶ Watch the custom X-ray object detection demonstration](assets/torch_results.mp4)
+<div align="center">
+
+https://github.com/gualtfor/RT-DETR-EFFICIENTNET/blob/main/assets/torch_results.mp4
+
+</div>
+
+</details>
 
 The demonstration uses the trained checkpoint and the custom PyTorch inference implementation.
 
