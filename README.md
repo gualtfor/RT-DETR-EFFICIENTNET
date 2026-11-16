@@ -159,13 +159,7 @@ The inference visualization includes:
 
 **Video:** `assets/torch_results.mp4`
 
-<div align="center">
-
 https://github.com/user-attachments/assets/c55824e5-1e7e-4a2b-9872-12bb85bc248d
-
-</div>
-
-</details>
 
 The demonstration uses the trained checkpoint and the custom PyTorch inference implementation.
 
