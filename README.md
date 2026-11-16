@@ -160,7 +160,7 @@ The inference visualization includes:
 **Video:** `assets/torch_results.mp4`
 
 <video
-  src="https://github.com/user-attachments/assets/c55824e5-1e7e-4a2b-9872-12bb85bc248d"
+  src="https://github.com/user-attachments/assets/1cb09fb2-a8b6-487c-8be6-4121b5713abb"
   controls
   muted
   playsinline
