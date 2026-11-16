@@ -1,3 +1,7 @@
+
+
+https://github.com/user-attachments/assets/92fcebb4-cbcf-40ae-a78a-3e44414c7305
+
 # RT-DETRv4 with EfficientNetV2 for X-ray Threat Detection
 
 **An experimental implementation of RT-DETRv4 integrating an EfficientNetV2 backbone and DINOv3 teacher model for detecting prohibited objects in X-ray security images.**
